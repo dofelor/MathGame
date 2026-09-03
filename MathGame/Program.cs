@@ -2,7 +2,12 @@
 {
     class Program
     {
-        List<string[]> listHistoryMathGame = new List<string[]>();
+        private static List<string[]> listHistoryMathGame = new List<string[]>();
+
+        static void SaveHistory(string[] history)
+        {
+            listHistoryMathGame.Add(history);
+        }
 
         static int[] ExampsAndAnswersCreate(string op, out string[] examples)
         {
@@ -46,10 +51,12 @@
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the Math Game!\nSelect the mathematical operation you want to work with.\n+\t-\t*\t/ ");
+            Console.WriteLine("Welcome to the Math Game!");
             Console.WriteLine();
             while (true)
             {
+                Console.WriteLine("\nSelect the mathematical operation you want to work with.\n+\t-\t*\t/ ");
+                Console.WriteLine();
                 string? op = Console.ReadLine();
                 if (op != "+" && op != "-" && op != "*" && op != "/")
                 {
@@ -61,28 +68,37 @@
                 Console.WriteLine();
                 Console.WriteLine("You need to solve this examples:\n");
 
+                string[] historyGame = new string[gameAnswers.Length];
+
                 for (int i = 0; i < gameAnswers.Length; i++)
                 {
                     string enteredNumFromPlayer;
                     Console.Write($"{gameExamples[i]} = ");
                     enteredNumFromPlayer = Console.ReadLine();
+                    historyGame[i] = $"{gameExamples[i]} = {enteredNumFromPlayer}";
                     if (int.TryParse(enteredNumFromPlayer, out int enteredParseIntNum))
                     {
                         if (enteredParseIntNum == gameAnswers[i])
                         {
                             Console.WriteLine("That's a correct answer\n");
+
                         }
                         else
                         {
-                            Console.WriteLine($"You entered wrong number");
+                            Console.WriteLine($"You entered wrong number\n");
                         }
                     }
-                    else Console.WriteLine("You didn't enter a number. This is incorrect.");
+                    else Console.WriteLine("You didn't enter a number. This is incorrect.\n");
 
                 }
+
+                SaveHistory(historyGame);
+
+
                 while (true)
                 {
-                    Console.WriteLine("Thank you for playing, would you like to continue?\nY\\N?");
+                    Console.WriteLine("Thank you for playing, would you like to continue?\nY\\N?\nOr wuld you like to see the history of game?");
+                    Console.WriteLine("To see the history of game, pls enter \"BURMALDA\"");
                     string finalOrContinue = Console.ReadLine().ToUpper();
 
                     if (finalOrContinue == "Y") break;
@@ -90,6 +106,29 @@
                     {
                         Console.WriteLine("Goodbye!");
                         return;
+                    }
+                    else if (finalOrContinue == "BURMALDA")
+                    {
+                        if(listHistoryMathGame.Count == 0)
+                        {
+                            Console.WriteLine("You haven't played any games.");
+                            continue;
+                        }
+                        Console.WriteLine("History: ");
+                        int matchNumber = 1;
+                        foreach (string[] array in listHistoryMathGame)
+                        {
+                            Console.WriteLine($"\n------- Game №{matchNumber} -------");
+                            foreach (string exmp in array)
+                            {
+                                Console.WriteLine(exmp);
+                            }
+                            
+                            matchNumber++;
+                        }
+                        Console.WriteLine("That's your game history! Press any button to continue");
+                        Console.ReadLine();
+                        continue;
                     }
                     else Console.WriteLine("Invalid input! Pls enter Y or N");
                 }
