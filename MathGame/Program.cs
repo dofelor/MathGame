@@ -18,8 +18,19 @@
 
             for(int i= 0; i < examples.Length; i++)
             {
-                int firstNum = rnd.Next(0, 100);
-                int secondNum = rnd.Next(0, 100);
+                int firstNum;
+                int secondNum;
+                if (op == "/")
+                {
+                    secondNum = rnd.Next(1, 10);
+                    int multiplier = rnd.Next(0, 11);
+                    firstNum = multiplier * secondNum;
+                }
+                else
+                {
+                    firstNum = rnd.Next(0, 100);
+                    secondNum = rnd.Next(0, 100);
+                }
                 string example = $"{firstNum} {op} {secondNum}";
                 examples[i] = example;
                 int answer;
